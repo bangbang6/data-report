@@ -5,6 +5,8 @@ import './plugins/element.js'
 import ECharts from 'echarts'
 import vueEcharts from 'vue-echarts'
 import './style/index.css'
+import VCharts from 'v-charts'
+Vue.use(VCharts)
 Vue.component('v-chart',vueEcharts)
 Vue.prototype.$echarts = ECharts
 Vue.config.productionTip = false
