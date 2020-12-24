@@ -1,15 +1,15 @@
 <template>
-  <common-card title="累计用户数" value="1,775,867">
+  <common-card title="累计用户数" :value="userToday">
     <template v-slot:chart>
       <v-chart :options="getOption()"></v-chart>
     </template>
     <template v-slot:total>
       <div class="total-users-footer">
         <span>日同比</span>
-        <span class="emphasis">35.7%</span>
+        <span class="emphasis">{{userGrowthLastDay+"%"}}</span>
         <div class="increase" />
         <span class="month">月同比</span>
-        <span class="emphasis">41.2%</span>
+        <span class="emphasis">{{userGrowthLastMonth+"%"}}</span>
         <div class="decrease" />
       </div>
     </template>
@@ -18,12 +18,14 @@
 
 <script>
 import CardMixin from '@/mixins/CardMixin'
+import DataMixin from '@/mixins/DataMixin'
 export default {
-  mixins: [CardMixin],
+  mixins: [CardMixin, DataMixin],
 
 
   methods: {
     getOption () {
+
       return {
         grid: {
           left: 0,
@@ -35,25 +37,27 @@ export default {
           type: "value",
           show: false //坐标系隐藏 包括横线和文字
         },
+        tooltip: {},
         yAxis: {
           type: "category",
           show: false
         },
         series: [{
           type: 'bar',
-          data: [200],
+          data: [this.userTodayNumber],
           barWidth: 10,
           stack: '总量',
           color: '#45c946',
-
+          name: "今日用户数"
         }, {
           type: 'bar',
-          data: [250],
+          data: [this.userLastMonth],
           stack: '总量', //数据堆叠 两个图进行合并
-          color: '#eee'
+          color: '#eee',
+          name: "上个月用户数"
         }, {
           type: "custom",
-          data: [200],
+          data: [this.userTodayNumber],
           renderItem (params, api) {
             const value = api.value()
             const endPoint = api.coord([value, 0]) //自动计算200，0 这个点坐标是什么 数据值映射到画布上

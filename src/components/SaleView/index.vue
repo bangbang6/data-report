@@ -2,10 +2,10 @@
   <div class="sales-view">
     <el-card shadow="hover" :body-style="{ padding: '0 0 20px 0' }">
       <template v-slot:header>
-        <sale-header></sale-header>
+        <sale-header @changeIndex="handleChange"></sale-header>
       </template>
       <template>
-        <sale-body></sale-body>
+        <sale-body :activeIndex="activeIndex"></sale-body>
       </template>
     </el-card>
   </div>
@@ -16,7 +16,17 @@
 import SaleHeader from './SaleHeader'
 import SaleBody from './SaleBody'
 export default {
-  components: { SaleHeader, SaleBody }
+  components: { SaleHeader, SaleBody },
+  data () {
+    return {
+      activeIndex: '1'
+    }
+  },
+  methods: {
+    handleChange (index) {
+      this.activeIndex = index
+    }
+  }
 }
 </script>
 

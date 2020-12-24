@@ -7,8 +7,18 @@
         </template>
         <template>
           <div class="chart-wrapper">
-            <bottom-chart title="搜索用户数" number="90,103"></bottom-chart>
-            <bottom-chart title="搜索量" number="204,894"></bottom-chart>
+            <bottom-chart
+              title="搜索用户数"
+              :number="userCount"
+              :axis="userAxis"
+              :chartData="userChartData"
+            ></bottom-chart>
+            <bottom-chart
+              title="搜索量"
+              :number="searchCount"
+              :axis="searchAxis"
+              :chartData="searchChartData"
+            ></bottom-chart>
           </div>
           <div class="table-wrapper">
             <bottom-table></bottom-table>
@@ -21,7 +31,7 @@
         <template v-slot:header>
           <div class="wrapper1">
             <div class="title-wrapper">分类销售排行</div>
-            <el-radio-group v-model="text" size="small">
+            <el-radio-group v-model="text" size="small" @change="handleChange">
               <el-radio-button label="品类"></el-radio-button>
               <el-radio-button label="商品"></el-radio-button>
             </el-radio-group>
@@ -29,7 +39,7 @@
         </template>
         <template>
           <div class="pieChartWrapper">
-            <category-chart></category-chart>
+            <category-chart :text="text"></category-chart>
           </div>
         </template>
       </el-card>
@@ -41,11 +51,41 @@
 import BottomChart from './BottomChart'
 import BottomTable from './BottomTable'
 import CategoryChart from './CategoryChart'
+import DataMixin from '../../mixins/DataMixin'
 export default {
   components: { BottomChart, BottomTable, CategoryChart },
+  mixins: [DataMixin],
   data () {
     return {
       text: "品类"
+    }
+  },
+  computed: {
+    userCount () {
+      return this.wordData && this.formatter(this.wordData.reduce((s, i) => s + i.user, 0))
+    },
+    searchCount () {
+      return this.wordData && this.formatter(this.wordData.reduce((s, i) => s + i.count, 0))
+    },
+    searchAxis () {
+
+      return this.wordData ? this.wordData.map(v => v.word) : []
+    },
+    userAxis () {
+      return this.wordData ? this.wordData.map(v => v.word) : []
+    },
+    userChartData () {
+      return this.wordData ? this.wordData.map(v => v.user) : []
+
+    },
+    searchChartData () {
+      return this.wordData ? this.wordData.map(v => v.count) : []
+
+    }
+  },
+  methods: {
+    handleChange (text) {
+      this.text = text
     }
   }
 }

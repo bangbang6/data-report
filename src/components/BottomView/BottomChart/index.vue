@@ -10,21 +10,24 @@
 export default {
   props: {
     title: String,
-    number: String
+    number: String,
+    axis: Array,
+    chartData: Array
   },
-  data () {
-    return {
-      options: {
+  computed: {
+    options () {
+      return {
         xAxis: {
           type: 'category',
-          boundaryGap: false
+          boundaryGap: false,
+          data: this.axis
         },
         yAxis: {
           show: false
         },
         series: {
           type: 'line',
-          data: [100, 120, 140, 130, 200, 240, 160, 200, 150, 80, 160],
+          data: this.chartData,
           areaStyle: {
             color: 'rgba(95,187,255,.5)'
           },
@@ -43,6 +46,11 @@ export default {
           right: 0
         }
       }
+    }
+  },
+  data () {
+    return {
+
     }
   }
 }

@@ -1,19 +1,20 @@
 <template>
-  <common-card title="今日交易用户数" value="767,557">
+  <common-card title="今日交易用户数" :value="orderUser">
     <template v-slot:chart>
       <v-chart :options="getOption()"></v-chart>
     </template>
     <template v-slot:total>
       <span>退货率</span>
-      <span class="emphasis">5.26%</span>
+      <span class="emphasis">{{returnRate + '%'}}</span>
     </template>
   </common-card>
 </template>
 
 <script>
 import CardMixin from '@/mixins/CardMixin'
+import DataMixin from '@/mixins/DataMixin'
 export default {
-  mixins: [CardMixin],
+  mixins: [CardMixin, DataMixin],
   methods: {
     getOption () {
       return {
@@ -22,7 +23,7 @@ export default {
           type: 'category',
           show: false,
 
-          data: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00'] //x轴数据
+          data: this.orderUserTrendAxis //x轴数据
         },
         yAxis: {
           show: false,
@@ -30,7 +31,8 @@ export default {
         },
         series: [{
           type: 'bar',
-          data: [460, 21, 250, 360, 77, 89, 360, 420, 89, 120, 170],
+          name: "用户订单量",
+          data: this.orderUserTrend,
 
         }],
         grid: {

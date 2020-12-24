@@ -3,18 +3,41 @@
 </template>
 
 <script>
-const mockData = [
-  { legendname: "地方菜系", value: 41, percentage: "25.35%", itemStyle: { color: '#8d7fec' }, name: "地方菜系 | 25.35%" },
-  { legendname: "简易便当", value: 20, percentage: "21.35%", itemStyle: { color: '#5085f2' }, name: "简易便当 | 21.35%" },
-  { legendname: "香锅冒菜", value: 63, percentage: "32.35%", itemStyle: { color: '#f8726b' }, name: "香锅冒菜 | 32.35%" },
-  { legendname: "汉堡披萨", value: 80, percentage: "41.35%", itemStyle: { color: '#e7e702' }, name: "汉堡披萨 | 41.35%" }
-]
+import DataMixin from '@/mixins/DataMixin'
 export default {
+  mixins: [DataMixin],
+  props: {
+    text: String
+  },
   data () {
     return {
-      options: {
+
+    }
+  },
+  computed: {
+    options () {
+      if (!this.category1 || !this.category2) return
+      const data = this.text === '品类' ? this.category1.data1.slice(0, 6) : this.category2.data1.slice(0, 6)
+      const axis = this.text === '品类' ? this.category1.axisX.slice(0, 6) : this.category2.axisX.slice(0, 6)
+      const total = data.reduce((s, i) => s + i, 0)
+      const colors = ['#8d7fec', '#5085f2', '#f8726b', '#e7e702', '#78f283', '#4bc1fc']
+      console.log(data, axis);
+      const chartData = data.map((item, index) => {
+        let percent = `${((item / total) * 100).toFixed(2)}%`
+        return {
+          legendname: axis[index],
+          value: item,
+          percent,
+          itemStyle: {
+            color: colors[index]
+          },
+          name: `${axis[index]} | ${percent}`
+        }
+
+      })
+      return {
         title: [{
-          text: "品类分布",
+          text: `${this.text}分布`,
           textStyle: {
             fontSize: 14,
             color: '#666'
@@ -22,7 +45,7 @@ export default {
           left: 20,
           top: 20
         }, {
-          text: "累计订单量",
+          text: `累计${this.text}量`,
           subtext: "327",
           x: '34.5%',
           y: '42.5%',
@@ -38,7 +61,7 @@ export default {
         }],
         series: [{
           type: 'pie',
-          data: mockData,
+          data: chartData,
           label: {
             normal: {
               show: true,

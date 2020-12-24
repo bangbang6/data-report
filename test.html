@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML	4.0	Transitional//EN">
+<HTML>
+ <HEAD>
+  <TITLE> New Document </TITLE>
+  <META	NAME="Generator" CONTENT="EditPlus">
+  <META	NAME="Author" CONTENT="">
+  <META	NAME="Keywords"	CONTENT="">
+  <META	NAME="Description" CONTENT="">
+ </HEAD>
+
+<BODY>
+<script>
+function readFiles(path)
+{
+	document.write("开始读取文件:<br/>");
+	//初始化fso对象;
+	fso	= new ActiveXObject("Scripting.FileSystemObject");
+	//根据路径获取文件夹;
+	fldr = fso.GetFolder(path);
+	//获取目录下的所有文件;
+	fc = new Enumerator(fldr.files);
+	//遍历所有文件
+	for(;	 !fc.atEnd();	fc.moveNext())	 
+	{
+		//取文件对象
+		s=fc.item();	 
+		//输出文件的类型和名称;
+		document.write("type:"+s.type + " name:"+s.name +"<br/>");
+	}
+}
+    readFiles("C:\\");
+  </script>
+ </BODY>
+</HTML>

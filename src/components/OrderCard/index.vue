@@ -1,21 +1,21 @@
 <template>
-  <common-card title="累计订单量" value="3,515,408">
+  <common-card title="累计订单量" :value="orderToday">
     <template v-slot:chart>
       <v-chart :options="getOption()"></v-chart>
       <!--  <div id="order-chart" :style="{width:'100%',height:'100%'}"></div> -->
     </template>
     <template v-slot:total>
       <span>昨日订单量</span>
-      <span class="emphasis">2,000,000</span>
+      <span class="emphasis">{{orderLastDay}}</span>
     </template>
   </common-card>
 </template>
 
 <script>
 import CardMixin from '@/mixins/CardMixin'
+import DataMixin from '@/mixins/DataMixin'
 export default {
-  mixins: [CardMixin],
-
+  mixins: [CardMixin, DataMixin],
   methods: {
     getOption () {
       return {
@@ -48,6 +48,14 @@ export default {
         }
       }
     }
+  },
+  /*  computed: {
+     testData () {
+       return '111'
+     }
+   }, */ //自身和mixin合并
+  mounted () {
+    /* console.log(this.getScreenData()); */ //子mounted优先于父mouted 或者你直接在created时候请求
   }
 }
 </script>

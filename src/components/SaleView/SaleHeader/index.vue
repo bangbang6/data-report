@@ -1,6 +1,12 @@
 <template>
   <div class="menu-wrapper">
-    <el-menu mode="horizontal" size="small" :default-active="activeIndex" class="sales-view-menu">
+    <el-menu
+      mode="horizontal"
+      size="small"
+      default-active="1"
+      class="sales-view-menu"
+      @select="handleSelect"
+    >
       <el-menu-item index="1">销售额</el-menu-item>
       <el-menu-item index="2">访问量</el-menu-item>
     </el-menu>
@@ -30,7 +36,6 @@
 export default {
   data () {
     return {
-      activeIndex: '1',
       text: '今日',
       date: null,
 
@@ -68,6 +73,9 @@ export default {
         ]
       }
 
+    },
+    handleSelect (index) {
+      this.$emit('changeIndex', index)
     }
   }
 }
