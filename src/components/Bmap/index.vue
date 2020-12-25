@@ -9,12 +9,10 @@
 </template>
 
 <script>
-const mockData = [
-  { name: "北京", value: [116.405994, 39.917149, 200] },
-  { name: "上海", value: [121.483415, 31.231483, 100] },
-  { name: "武汉", value: [114.277378, 30.603689, 150] },
-]
+import DataMixin from '@/mixins/DataMixin'
+
 export default {
+  mixins: [DataMixin],
   data () {
     this.chartSettings = {
       key: "G1LFyjrNGIkns5OfpZnrCGAKxpycPLwb",
@@ -125,17 +123,38 @@ export default {
       }
     }
     return {
-
+      chartData: [],
       title: {
         text: "慕课外卖销售大盘",
         subtext: "销售趋势统计",
         left: 'center'
       },
-      series: [{
+      series: [],
+      tooltip: {
+
+      }
+    }
+  },
+
+  methods: {
+    convertData (data, geo) {
+      return data.map((item) => ({
+        name: item.name,
+        value: [...geo[item.name], item.value]
+
+      }))
+    }
+  },
+  watch: {
+    mapData (newV) {
+      const { data, geo } = newV
+      console.log(data);
+      console.log(geo);
+      this.series = [{
         type: 'scatter',
         name: '销售额',
         coordinateSystem: 'bmap',
-        data: mockData,
+        data: this.convertData(data, geo),
         encode: { value: 2 },
         itemStyle: {
           color: (params) => {
@@ -165,10 +184,11 @@ export default {
 
         }
       }, {
-        name: "top 3",
+        name: "top 10",
         type: 'effectScatter',
         coordinateSystem: 'bmap',
-        data: mockData,
+        data: this.convertData(data, geo),
+
         encode: { value: 2 },
         itemStyle: {
           color: (params) => {
@@ -204,13 +224,9 @@ export default {
           brushType: "stroke",
 
         }
-      }],
-      tooltip: {
-
-      }
+      }]
     }
-  },
-
+  }
 }
 </script>
 

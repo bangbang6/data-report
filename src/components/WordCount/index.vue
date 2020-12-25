@@ -3,27 +3,29 @@
 </template>
 
 <script>
+import DataMixin from '@/mixins/DataMixin'
+
 export default {
+  mixins: [DataMixin],
   data () {
     return {
-      chartData: {
-        columns: ['word', 'value'],
-        rows: [
-          { word: "廖振邦", value: 10 * Math.random() },
-          { word: "慕课网", value: 10 * Math.random() },
-          { word: "华科", value: 10 * Math.random() },
-          { word: "武汉", value: 10 * Math.random() },
-          { word: "北京", value: 10 * Math.random() },
-          { word: "上海", value: 10 * Math.random() },
-          { word: "成都", value: 10 * Math.random() },
-          { word: "前端", value: 10 * Math.random() },
-          { word: "阿里", value: 10 * Math.random() },
-        ]
-
-      },
+      chartData: {},
       chartSettings: {
         color: ['rgba(97,216,0,.7)', 'rgba(204,178,26,.7)', 'rgba(245,166,35,.7)', 'rgba(156,13,113,.7)'],
         shape: 'circle'
+      }
+    }
+  },
+  watch: {
+    wordData (newV) {
+      console.log('newv', newV);
+      this.chartData = {
+        columns: ['word', 'value'],
+        rows: newV.map(item => ({
+          word: item.word,
+          value: item.count
+        }))
+
       }
     }
   }

@@ -50,7 +50,7 @@ export default {
   },
   mounted () {
     wordcloud().then(res => { this.wordData = res })
-    mapScatter().then(res => { this.mapData = res.data })
+    mapScatter().then(res => { this.mapData = res })
     screenData().then(res => {
       this.screenData = res
     })
